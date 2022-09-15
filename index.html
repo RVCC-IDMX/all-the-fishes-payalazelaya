@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All the Fishes</title>
+  </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"></script>
+  <body>
+    <script>
+      // The app
+      const app = new PIXI.Application({
+        width: 740,
+        height: 600,
+        backgroundColor: 0x9dc6ff,
+      });
+
+      //Give us the view
+      document.body.appendChild(app.view);
+
+      //Background
+      const tank = PIXI.Sprite.from('img/fish_tank.png');
+      tank.scale.set(1.55, 1.55);
+      tank.x = 0;
+      tank.y = 0;
+
+      //Our fish
+      const my_sprite = PIXI.Sprite.from('img/fish.png');
+      my_sprite.scale.set(1, 1);
+      my_sprite.x = 100;
+      my_sprite.y = 100;
+      my_sprite.tint = 0xffffff;
+
+      //Add 2nd fish
+      const my_sprite2 = PIXI.Sprite.from('img/fish.png');
+      my_sprite2.x = 500;
+      my_sprite2.y = 350;
+      my_sprite2.scale.set(-0.5, 0.5);
+      my_sprite2.tint = 0xf0f0f0;
+      my_sprite2.anchor.set(0.5);
+
+      // Add 3rd fish
+      const my_sprite3 = PIXI.Sprite.from('img/angel_fish.png');
+      my_sprite3.x = 300;
+      my_sprite3.y = 550;
+      my_sprite3.scale.set(0.3, 0.3);
+      my_sprite3.anchor.set(1);
+
+      //Add 4th fish
+      const my_sprite4 = PIXI.Sprite.from('img/blue_fish.png');
+      my_sprite4.x = 700;
+      my_sprite4.y = 200;
+      my_sprite4.scale.set(-0.1, 0.1);
+
+      //Add 5th fish
+      const my_sprite5 = PIXI.Sprite.from('img/tropical_fish.png');
+      my_sprite5.x = 500;
+      my_sprite5.y = 50;
+      my_sprite5.scale.set(0.2, 0.2);
+
+      //Add 6th fish
+      const my_sprite6 = PIXI.Sprite.from('img/colorful_fish.png');
+      my_sprite6.x = 30;
+      my_sprite6.y = 60;
+      my_sprite6.scale.set(0.3, 0.3);
+
+      //Create fish container
+      const my_container = new PIXI.Container();
+
+      //Add fish to container
+      my_container.addChild(tank);
+      my_container.addChild(my_sprite);
+      my_container.addChild(my_sprite2);
+      my_container.addChild(my_sprite3);
+      my_container.addChild(my_sprite4);
+      my_container.addChild(my_sprite5);
+      my_container.addChild(my_sprite6);
+
+      app.stage.addChild(my_container);
+
+      // //let loop = () => {
+      //   let time = Date.now();
+      //   let wobble = Math.sin(time / 1000) * 50;
+
+      //   my_container.y = wobble;
+      //   requestAnimationFrame(loop);
+      // };
+
+      // loop();
+    </script>
+  </body>
+</html>
