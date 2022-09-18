@@ -19,51 +19,66 @@
       //Give us the view
       document.body.appendChild(app.view);
 
+      // Fishes for Aquarium
+      const my_sprite = PIXI.Sprite.from('img/fish.png');
+      const my_sprite2 = PIXI.Sprite.from('img/fish.png');
+      const my_sprite3 = PIXI.Sprite.from('img/angel_fish.png');
+      const my_sprite4 = PIXI.Sprite.from('img/blue_fish.png');
+      const my_sprite5 = PIXI.Sprite.from('img/tropical_fish.png');
+      const my_sprite6 = PIXI.Sprite.from('img/colorful_fish.png');
+
+      //Bubbles for Aquarium
+      const bubble = PIXI.Sprite.from('img/bubble.png');
+      const bubble2 = PIXI.Sprite.from('img/bubble.png');
+      const bubble3 = PIXI.Sprite.from('img/bubble.png');
+      const bubble4 = PIXI.Sprite.from('img/bubble.png');
+
+      const bubbles = [bubble, bubble2, bubble3, bubble4];
+
+      bubbles.forEach((bubble) => {
+        bubble.scale.set(0.1);
+        bubble.anchor.set(1);
+        bubble.position.set(Math.random() * 650, Math.random() * 550);
+      });
+
+      //Scale the fishes
+      my_sprite.scale.set(1, 1);
+      my_sprite2.scale.set(-0.5, 0.5);
+      my_sprite3.scale.set(0.3, 0.3);
+      my_sprite4.scale.set(-0.1, 0.1);
+      my_sprite5.scale.set(0.2, 0.2);
+      my_sprite6.scale.set(0.3, 0.3);
+
+      // Position the fishes
+      my_sprite.x = 100;
+      my_sprite.y = 100;
+      my_sprite2.x = 500;
+      my_sprite2.y = 350;
+      my_sprite3.x = 300;
+      my_sprite3.y = 550;
+      my_sprite4.x = 700;
+      my_sprite4.y = 200;
+      my_sprite5.x = 500;
+      my_sprite5.y = 50;
+      my_sprite6.x = 30;
+      my_sprite6.y = 60;
+
+      // Flip the fishes
+      my_sprite2.anchor.set(1);
+      my_sprite3.anchor.set(1);
+
+      // Tint the fishes
+      my_sprite2.tint = 0x8b4000;
+      my_sprite3.tint = 0x0e86d4;
+      my_sprite4.tint = 0xffff00;
+      my_sprite5.tint = 0xffc0cb;
+      my_sprite6.tint = 0xff0000;
+
       //Background
       const tank = PIXI.Sprite.from('img/fish_tank.png');
       tank.scale.set(1.55, 1.55);
       tank.x = 0;
       tank.y = 0;
-
-      //Our fish
-      const my_sprite = PIXI.Sprite.from('img/fish.png');
-      my_sprite.scale.set(1, 1);
-      my_sprite.x = 100;
-      my_sprite.y = 100;
-      my_sprite.tint = 0xffffff;
-
-      //Add 2nd fish
-      const my_sprite2 = PIXI.Sprite.from('img/fish.png');
-      my_sprite2.x = 500;
-      my_sprite2.y = 350;
-      my_sprite2.scale.set(-0.5, 0.5);
-      my_sprite2.tint = 0xf0f0f0;
-      my_sprite2.anchor.set(0.5);
-
-      // Add 3rd fish
-      const my_sprite3 = PIXI.Sprite.from('img/angel_fish.png');
-      my_sprite3.x = 300;
-      my_sprite3.y = 550;
-      my_sprite3.scale.set(0.3, 0.3);
-      my_sprite3.anchor.set(1);
-
-      //Add 4th fish
-      const my_sprite4 = PIXI.Sprite.from('img/blue_fish.png');
-      my_sprite4.x = 700;
-      my_sprite4.y = 200;
-      my_sprite4.scale.set(-0.1, 0.1);
-
-      //Add 5th fish
-      const my_sprite5 = PIXI.Sprite.from('img/tropical_fish.png');
-      my_sprite5.x = 500;
-      my_sprite5.y = 50;
-      my_sprite5.scale.set(0.2, 0.2);
-
-      //Add 6th fish
-      const my_sprite6 = PIXI.Sprite.from('img/colorful_fish.png');
-      my_sprite6.x = 30;
-      my_sprite6.y = 60;
-      my_sprite6.scale.set(0.3, 0.3);
 
       //Create fish container
       const my_container = new PIXI.Container();
@@ -77,17 +92,53 @@
       my_container.addChild(my_sprite5);
       my_container.addChild(my_sprite6);
 
+      my_container.addChild(bubble);
+      my_container.addChild(bubble2);
+      my_container.addChild(bubble3);
+      my_container.addChild(bubble4);
+
+      //Add to stage
       app.stage.addChild(my_container);
 
-      // //let loop = () => {
-      //   let time = Date.now();
-      //   let wobble = Math.sin(time / 1000) * 50;
+      app.stage.addChild(my_sprite);
+      app.stage.addChild(my_sprite2);
+      app.stage.addChild(my_sprite3);
+      app.stage.addChild(my_sprite4);
+      app.stage.addChild(my_sprite5);
+      app.stage.addChild(my_sprite6);
 
-      //   my_container.y = wobble;
-      //   requestAnimationFrame(loop);
-      // };
+      app.stage.addChild(bubble);
+      app.stage.addChild(bubble2);
+      app.stage.addChild(bubble3);
+      app.stage.addChild(bubble4);
 
-      // loop();
+      let loop = () => {
+        let time = Date.now();
+        let wobble = Math.sin(time / 350) * 40;
+        let wobble2 = Math.sin(time / 500) * 40;
+        let wobble3 = Math.sin(time / 200) * 20;
+
+        my_sprite2.x = 700 + wobble;
+        my_sprite4.x = 500 + wobble2;
+        my_sprite6.x = 400 + wobble3;
+
+        my_sprite.y = 550 + wobble;
+        my_sprite3.y = 400 + wobble2;
+        my_sprite5.y = 400 + wobble3;
+
+        bubbles.forEach((bubble) => {
+          bubble.position.x -= 1;
+
+          if (bubble.position.x < 0) {
+            bubble.position.x = 740;
+            bubble.position.y = Math.random() * 600;
+          }
+        });
+
+        requestAnimationFrame(loop);
+      };
+
+      loop();
     </script>
   </body>
 </html>
