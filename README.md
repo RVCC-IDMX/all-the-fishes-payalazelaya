@@ -18,6 +18,10 @@
 
 [Cartoon Fish](https://www.freeiconspng.com/img/26345)
 
+[Small Fish](https://pngtree.com/so/Small)
+
+[Small Cartoon Fish](https://pngtree.com/so/Cartoon)
+
 ### Code Strategy
 
 #### Fishes
