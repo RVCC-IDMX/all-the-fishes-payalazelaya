@@ -477,7 +477,7 @@ Animate.loop = function(obj,loopFunc) {
       let moveBubbles = async () => {
         bubbles.forEach(async (bubble) => {
           await Animate.to(bubble, {x: -100, y: bubble.y, duration: Math.random() * 600 + 200});
-          bubble.position.set(Math.random() * 740, 500);
+          bubble.position.set(Math.random() * 740, 580);
           bubble.scale.set(Math.random() / 4);
           moveBubbles();
         })
