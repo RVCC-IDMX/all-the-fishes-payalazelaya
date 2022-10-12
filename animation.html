@@ -17,18 +17,18 @@
             height: 600,
             backgroundColor:0x9dc6ff,
         });
-    var stage = app.stage;
-    var view = app.view;
 
+    let stage = app.stage;
+    let view = app.view;
     document.body.appendChild(view);
 
-    const my_sprite = PIXI.Sprite.from("images/fish.png");
-        stage.addChild(my_sprite);
+    const my_sprite = PIXI.Sprite.from("img/fish.png");
+    stage.addChild(my_sprite);
 
         function animationLoop() {
             let time = Date.now();
 
-            let wobble1 = Math.sin(time / 1000) * 20;
+            let wobble1 = Math.sin(time / 500) * 50;
 
             my_sprite.y = wobble1 + 200;
 

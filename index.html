@@ -36,10 +36,18 @@
       const bubbles = [bubble, bubble2, bubble3, bubble4];
 
       bubbles.forEach((bubble) => {
-        bubble.scale.set(0.1);
+        bubble.scale.set(0.10);
         bubble.anchor.set(1);
-        bubble.position.set(Math.random() * 650, 550);
+        bubble.position.set(Math.random() * 700, 550);
       });
+
+      //Background for Aquarium
+      const tank = PIXI.Sprite.from('img/fish_tank.png');
+
+      //Measurements for background
+      tank.scale.set(1.55, 1.55);
+      tank.x = 0;
+      tank.y = 0;
 
       //Scale the fishes
       my_sprite.scale.set(1, 1);
@@ -93,31 +101,8 @@
       //Create fish container
       const my_container = new PIXI.Container();
 
-      //Background
-      const tank = PIXI.Sprite.from('img/fish_tank.png');
-      tank.scale.set(1.55, 1.55);
-      tank.x = 0;
-      tank.y = 0;
-
-      //Add fish plus bubbles to container
-      my_container.addChild(tank);
-
-      my_container.addChild(my_sprite);
-      my_container.addChild(my_sprite2);
-      my_container.addChild(my_sprite3);
-      my_container.addChild(my_sprite4);
-      my_container.addChild(my_sprite5);
-      my_container.addChild(my_sprite6);
-
-      my_container.addChild(bubble);
-      my_container.addChild(bubble2);
-      my_container.addChild(bubble3);
-      my_container.addChild(bubble4);
-
       //Add fish and bubbles to stage
       app.stage.addChild(tank);
-
-      //app.stage.addChild(my_container);
 
       app.stage.addChild(my_sprite);
       app.stage.addChild(my_sprite2);
@@ -256,7 +241,6 @@
 
           //Personal animation loop
           function loop() {
-
             //Calculate delta
             let ticker = Date.now() - startTime;
             let delta = ticker / end.duration;
@@ -295,31 +279,32 @@
         });
       }
 
-      Animate.wobbleto = function(obj, end) {
+      Animate.wobble = function(obj, end) {
         return new Promise((resolve, reject) => {
-          var start = {
+          let start = {
             x: obj.x,
             y: obj.y,
           }
 
-          if (end.duration == undefined) end.duration = 0; 
+          if (end.duration == undefined) end.duration = 0;
           if (end.easing == undefined) end.easing = Animate.linear;
 
           var startTime = Date.now();
 
           function loop() {
+            //Calculate delta
             let ticker = Date.now() - startTime;
             let delta = ticker / end.duration;
             let ease = end.easing(delta);
 
-            let wobble = Math.sin(ticker / 150) * 10;
+            let wobble = Math.sin(ticker / 200) * 20;
 
             if (delta >= 1 || end.duration === 0) {
-              obj.x = end.x; 
+              obj.x = end.x;
               obj.y = end.y;
 
               resolve();
-              return; 
+              return;
             }
 
             let lerp = (a, b, n) => {
@@ -333,18 +318,17 @@
           }
           cancelAnimationFrame(obj.animationID);
           loop();
-        });
+        })
       }
 
       Animate.rotate = (obj, end) => {
-        return new Promise ((resolve, reject) => {
-
+        return new promise((resolve,reject) => {
           var start = {
             angle: obj.angle,
           }
 
           if (end.duration == undefined) end.duration = 0;
-          if (end.easing == undefined) end.easing = Animate.linear; 
+          if (end.easing == undefined) end.easing = Animate.linear;
 
           var startTime = Date.now();
 
@@ -354,7 +338,7 @@
           }
 
           function loop() {
-            //Calculate delta
+            //Calculate our delta 
             let ticker = Date.now() - startTime;
             let delta = ticker / end.duration;
             let ease = end.easing(delta);
@@ -378,30 +362,27 @@
           }
           cancelAnimationFrame(obj.animationID);
           loop();
-        });
+        })
       }
 
       Animate.scale = (obj, end) => {
         return new Promise((resolve, reject) => {
-          
           var start = {
-            sx: obj.scale.x,
+            sx: obj.scale.x, 
             sy: obj.scale.y
           }
-
           if (end.duration == undefined) end.duration = 0;
           if (end.easing == undefined) end.easing = Animate.linear;
 
           var startTime = Date.now();
 
           function loop() {
-
-            //Calculate delta 
+            //Calculate delta
             let ticker = Date.now() - startTime;
             let delta = ticker / end.duration;
             let ease = end.easing(delta);
 
-            //If done, snap to end
+            //If done, snap to end 
             if (delta >= 1 || end.duration === 0) {
               obj.scale.x = end.sx;
               obj.scale.y = end.sy;
@@ -414,63 +395,10 @@
             let lerp = (a, b, n) => {
               return (1 - n) * a + n * b;
             }
+
             obj.scale.x = lerp(start.sx, end.sx, ease);
             obj.scale.y = lerp(start.sy, end.sy, ease);
-
-            obj.animationID = requestAnimationFrame(loop);
-          }
-          cancelAnimationFrame(obj.animationID);
-          loop();
-        });
-      }
-
-      Animate.tint = (obj, end) => {
-        return new Promise ((resolve, reject) => {
-          
-          var start = {
-            t: obj.tint,
-          }
-
-          if (end.duration == undefined) end.duration = 0;
-          if(end.easing == undefined) end.easing = Animate.linear;
-
-          var startTime = Date.now();
-
-          function loop() {
-
-            //Calculate delta
-            let ticker = Date.now() - startTime;
-            let delta = ticker / end.duration;
-            let ease = end.easing(delta);
-
-            //If done, snap to end
-            if (delta >= 1 || end.duration === 0) {
-              obj.tint = end.t; 
-
-              resolve();
-              return;
-            }
-
-            //Interpolation function 
-            let lerp = (a, b, n) => {
-              return (1 - n) * a + n * b;
-            }
-
-            // https://gist.github.com/nikolas/b0cce2261f1382159b507dd492e1ceef
-            let SRed = (start.t & 0xFF0000) >> 16;
-            let sGreen = (start.t & 0x00FF00) >> 8;
-            let sBlue = (start.t & 0x0000FF);
-
-            let eRed = (end.t & 0xFF0000) >> 16;
-            let eGreen = (end.t & 0x00FF00) >> 8;
-            let eBlue = (end.t & 0x0000FF);
-
-            let rRed = Math.round(lerp(sRed, eRed, ease));
-            let rGreen = Math.round(lerp(sGreen, eGreen, ease));
-            let rBlue = Math.round(lerp(sBlue, eBlue, ease));
-
-            obj.tint = (rGreen << 16) + (rRed << 8) + (rBlue | 0);
-
+            
             obj.animationID = requestAnimationFrame(loop);
           }
           cancelAnimationFrame(obj.animationID);
@@ -478,14 +406,55 @@
         })
       }
 
+      Animate.tint = (obj, end) => {
+        return new Promise((resolve, reject) => {
+
+          var start = {
+            t: obj.tint,
+          }
+
+          if (end.duration == undefined) end.duration = 0;
+          if (end.easing == undefined) end.easing = Animate.linear;
+
+          var startTime = Date.now();
+
+          function loop() {
+            //Calculate delta
+            let ticker = Date.now() - startTime;
+            let delta = ticker / end.duration;
+            let ease = end.easing(delta);
+
+            //If done, snap to end
+            if (delta >= 1 || end.duration === 0) {
+              obj.tint = end.t;
+
+              resolve();
+              return;
+            }
+
+            //Interpolation function
+            let lerp = (a, b, n) => {
+              return (1 - n) * a + n * b;
+            }
+
+            obj.tint = lerp(start.t, end.t, ease);
+
+            obj.animationID = requestAnimationFrame(loop);
+          }
+          cancelAnimationFrame(obj, animationID);
+          loop();
+        })
+      }
+
       Animate.alpha = (obj, end) => {
         return new Promise((resolve, reject) => {
+
           var start = {
             a: obj.alpha,
           }
 
           if (end.duration == undefined) end.duration = 0;
-          if (end.easing == undefined) end.easing = Animate.linear; 
+          if (end.easing == undefined) end.easing = Animate.linear;
 
           var startTime = Date.now();
 
@@ -507,6 +476,7 @@
             let lerp = (a, b, n) => {
               return (1 - n) * a + n * b;
             }
+
             obj.alpha = lerp(start.a, end.a, ease);
 
             obj.animationID = requestAnimationFrame(loop);
@@ -523,90 +493,62 @@
         Animate.to(obj, end);
       }
 
-      //Easings 
+      //Easing animations
       Animate.stop = (obj) => {
         cancelAnimationFrame(obj.animationID);
       }
 
       Animate.easeIn = (x) => x * x;
 
-      Animte.easeOut = (x) => 1 - (1- x) * (1 - x);
+      Animate.easeOut = (x) => 1 - (1 - x) * (1 - x);
 
       Animate.easeInOut = (x) => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
 
       let moveMySprite = async () => {
-        Animate.from(my_sprite, {x: 200, y: 150});
-        await Animate.to(my_sprite, {x: 200, y: 130, duration: 1500, easing:Animate.easeOut});
-        await Animate.to(my_sprite, {x: 200, y: 150, duration: 1500, easing:Animate.easeInOut});
+        Animate.from(my_sprite, {x: 210, y: 160});
+        await Animate.to(my_sprite, {x: 220, y: 140, duration: 1500, easing: Animate.easeOut});
+        await Animate.to(my_sprite, {x: 210, y: 160, duration: 1500, easing: Animate.easeInOut});
         moveMySprite();
       }
 
-      let makeMovement = async () => {
-        await Animate.rotate(my_sprite, {angle: -90, duration: 500, easing:Animate.easeInOut});
-        await Animate.to(my_sprite, {x: 200, y: 0, duration: 1000, easing:Animate.easeOut});
-        await Animate.rotate(my_sprite, {angle: 90, duration: 500, easing:Animate.easeInOut});
-        await Animate.to(my_sprite, {x: 200, y: 150, duration: 1500, easing:Animate.easeInOut});
-        await Animate.rotate(my_sprite, {angle: 0, duration: 500, easing:Animate.easeInOut});
-        moveMySprite();
+      let moveMySprite3 = async () => {
+        await Animate.wobble(my_sprite3, {x: 150, y: 350, duration: 2500, easing: Animate.linear});
+        await Animate.scale(my_sprite3, {sx: -.4, sy: .4, duration: 500, easing: Animate.easeIn});
+        await Animate.wobble(my_sprite3, {x: 300, y: 300, duration: 2500, easing: Animate.linear});
+        await Animate.scale(my_sprite3, {sx: .4, sy: .4, duration: 500, easing: Animate.easeIn});
+        moveMySprite3();
       }
 
       let moveMySprite5 = async () => {
-        await Animate.wobbleto(my_sprite5, {x: 110, y: 310, duration: 2000, easing: Animate.linear});
-        await Animate.scale(my_sprite5, {sx: -.4, sy: .4, duration: 500, easing: Animate.easeIn});
-        await Animate.wobbleto(my_sprite5, {x: 300, y: 300, duration: 2000, easing: Animate.linear});
-        await Animate.scale(my_sprite5, {sx: .4, sy: .4, duration: 500, easing: Animate.easeIn});
-        moveMySprite5()
+        await Animate.scale(my_sprite5, {sx: .5, sy: .5, duration: 700, easing: Animate.easeOut});
+        await Animate.scale(my_sprite5, {sx: .4, sy: .4, duration: 400, easing: Animate.easeOut});
+        moveMySprite5();
       }
 
-      let callMySprite6 = async (e) => {
-        let posX = e.data.global.x;
-        let posY = e.data.global.y;
-        await Animate.wobbleto(my_sprite6, {x: posX, y: posY, duration: 2000, easing: Animate.easeInOut});
-        await Animate.scale(my_sprite6, {sx: -.4, sy: .5, duration: 500, easing: Animate.easeIn});
-        await Animate.scale(my_sprite6, {sx: .5, sy: .5, duration: 500, easing: Animate.easeIn});
-        moveMySprite6();
-      }
-
-      let moveMySprite6 = async () => {
-        await Animate.scale(my_sprite6, {sx: .6, sy: .6, duration: 800, easing: Animate.easeOut});
-        await Animate.scale(my_sprite6, {sx: .5, sy: .5, duration: 500, easing: Animate.easeOut});
-        moveMySprite6();
-      }
-
-      let partyMySprite2 = async () => {
-        await Animate.tint(my_sprite2, {t: 0x00ff00, duration: 3000});
-        await Animate.rotate(my_sprite2, {angle: 360, duration: 2000});
-        await Animate.alpha(my_sprite2, {a: 1, duration: 800});
-        await Animate.tint(my_sprite2, {t: 0xcc0000, duration: 3000});
-        await Animate.rotate(my_sprite2, {angle: -360, duration: 2000});
-        await Animate.alpha(my_sprite2, {a: .5, duration: 800});
-        partyMySprite2();
+      let partyFish = async () => {
+        await Animate.tint(my_sprite6, {t: 0xADD8E6, duration: 2000});
+        await Animate.rotate(my_sprite6, {angle: 360, duration: 2500});
+        await Animate.alpha(my_sprite6, {a: 1, duration: 800});
+        await Animate.tint(my_sprite6, {t: 0xFFCCCB, duration: 2000});
+        await Animate.rotate(my_sprite6, {angle: -360, duration: 2500});
+        await Animate.alpha(my_sprite6, {a: .5, duration: 800});
+        partyFish();
       }
 
       let moveBubbles = async () => {
         bubbles.forEach(async (bubble) => {
-          await Animate.to(bubble, {x: bubble.x, y: -110, duration: Math.random() * 4000 + 2000});
-          bubble.position.set(Math.random() * 640, 500);
-          bubble.scale.set(Math.random() / 4);
+          await Animate.to(bubble, {x: -100, y: bubble.y, duration: Math.random() * 400 + 200});
+          bubble.position.set(Math.random() * 700, 550);
+          bubble.scale.set(Math.random() / 5);
           moveBubbles();
         })
       }
-
-      my_sprite.interactive = true;
-      tank.interactive = true;
-
-      my_sprite.on("pointertap", () => {
-        makeMovement();
-      }) 
-
-      tank.on("pointertap", (e) => {
-        callMySprite6(e);
-      })
+      
 
       moveMySprite();
+      moveMySprite3();
       moveMySprite5();
-      moveMySprite6();
-      partyMySprite2();
+      partyFish();
       moveBubbles();
     </script>
   </body>
